@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>汉语对话</title>
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js"></script>
+    <style>
+      :root {
+        --bg: #14161b;
+        --text: #e9e6df;
+        --muted: #7d8290;
+        --rule: #272b34;
+        --pinyin: #a9a99f;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "KaiTi", "Kaiti SC", "STKaiti", "楷体", "AR PL UKai CN", serif;
+        text-align: center;
+      }
+
+      main {
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 3rem 1.25rem 5rem;
+        font-size: clamp(1.5rem, 5vw, 2rem);
+      }
+
+      ruby {
+        ruby-align: center;
+        padding: 0 0.03em;
+      }
+
+      rt {
+        font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+        font-size: 0.5em;
+        color: var(--pinyin);
+        letter-spacing: 0.02em;
+      }
+
+      h2 {
+        font-weight: normal;
+        font-size: 1.15rem;
+        color: var(--muted);
+        margin: 4.5rem 0 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--rule);
+      }
+
+      h2:first-of-type {
+        margin-top: 0;
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .line {
+        margin: 0 0 1rem;
+      }
+
+      .who {
+        font-size: 2rem;
+        margin-bottom: 0.15rem;
+      }
+
+      .text {
+        font-size: 1em;
+        line-height: 2.2;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main id="app"></main>
+    <script>
+      const raw = `第一场　早上，学校 
+
+马大为：丁力波，早上好！
+丁力波：你早！好久不见。
+马大为：好久不见。你最近怎么样？
+丁力波：我很忙。你呢？
+马大为：我不太忙。 
+第二场　练习口语 
+
+丁力波：对了，今天我们有口语课。咱们一起练习口语吧。
+马大为：好。我是宋华，你问我。
+丁力波：请问，你叫什么名字？
+马大为：我姓宋，叫宋华。你叫什么名字？
+丁力波：我叫丁力波。认识你很高兴！
+马大为：认识你，我也很高兴。请进，请坐。
+丁力波：谢谢。您贵姓？
+马大为：我姓宋。
+丁力波：那是谁？
+马大为：那是陈老师，他是我们的汉语老师。你的口语很好。
+丁力波：谢谢。陈老师教我们说汉语，写汉字。
+马大为：写汉字有意思吗？
+丁力波：很有意思。我常常练习写汉字，也常练习口语。在口语课，我们只说汉语。
+马大为：你学习什么专业？
+丁力波：我的专业是中文。我学汉语，也学英语。我们有汉语课、口语课和语法课。
+马大为：你们班一共有多少人？
+丁力波：我们班一共有十五个人。男生很少，只有两个。大家都是学生。
+马大为：欢迎你来我们学校学习汉语！
+丁力波：谢谢！你是哪国人？
+马大为：我是美国人。你呢？
+丁力波：我是英国人。我哥哥叫林强，他在英国。陈老师是中国人，他是北京人。 
+第三场　墨尔本 
+
+马大为：丁力波，你一个人在墨尔本吗？
+丁力波：是，我一个人在墨尔本。我家在英国。
+马大为：你在几号楼？
+丁力波：我在十五号楼。你呢？
+马大为：我在八号楼。明天上午九点钟我到学校。
+丁力波：好。 
+第四场　照片 
+
+马大为：丁力波，你家有几口人？
+丁力波：我家有五口人：爸爸、妈妈、哥哥、妹妹和我。我们还有一只狗和一只猫，狗叫贝贝。我妈妈问你好。
+马大为：谢谢！你爸爸妈妈做什么工作？
+丁力波：我爸爸是医生，我妈妈是律师。
+马大为：你有弟弟吗？
+丁力波：我没有弟弟，也没有姐姐。你有兄弟姐妹吗？
+马大为：我没有兄弟姐妹，我家只有三口人。你看这张照片，这张照片真漂亮！
+丁力波：这是谁？
+马大为：这是陆雨平和他的女儿。陆雨平是北京人，现在在上海工作。
+丁力波：这个孩子今年几岁？
+马大为：她今年五岁。
+丁力波：我妹妹今年九岁，她也是学生。她上午有汉语课，晚上她还有英语课。 
+第五场　吃饭 
+
+马大为：咱们去吃饭吧。你喜欢吃什么？
+丁力波：我喜欢吃饺子和包子。大包子很好吃，小饺子也很好吃。你呢？
+马大为：我喜欢吃米饭和面条。
+丁力波：你喜欢喝什么？
+马大为：我喜欢喝茶，也喜欢喝咖啡。
+丁力波：今天吃饭的人很多。这个点心真好吃！
+马大为：饭也很好吃。 
+第六场　时间和课 
+
+丁力波：现在几点？
+马大为：现在差五分八点。
+丁力波：啊，我刚到学校，不晚吧？
+马大为：不晚。你明天几点有课？
+丁力波：明天上午十点十分我有语法课，下午两点一刻有钢琴课，晚上八点半我还要去看电影。
+马大为：你太忙！
+丁力波：我特别累。
+马大为：对了，你明天晚上有没有时间？咱们一起去喝咖啡吧。
+丁力波：恐怕不行，明天我没有时间。
+马大为：星期日呢？星期日我们班有活动，你参加吗？
+丁力波：这个星期我有很多事儿，一天也没有时间。
+马大为：真可惜！
+丁力波：不好意思。 
+第七场　生日聚会 
+
+马大为：今天几月几号？
+丁力波：今天八月二十二号。明天是我的生日。
+马大为：生日快乐！你今年多大？
+丁力波：我今年二十岁, 我属龙。我1988年出生。
+马大为：我属狗。
+丁力波：明天我家有一个生日聚会，欢迎你来！我哥哥的生日就是明天，他在英国也有个聚会。
+马大为：昨天我听说你的聚会。这是你的生日礼物，一盒巧克力。
+丁力波：谢谢你送我礼物！
+马大为：不客气，你太客气！我还送你一个蛋糕。
+丁力波：这个蛋糕真大！一会儿我介绍一下我的朋友们，大家都是学生。
+马大为：中国人生日吃寿面。咱们吃寿面吧！
+丁力波：好主意！一会儿咱们唱歌、跳舞吧。
+马大为：我不喜欢跳舞，我喜欢唱歌。我唱一个中国歌，你跳个舞。
+丁力波：好！祝我生日快乐，咱们干杯！
+马大为：干杯！
+丁力波：我今天很快乐。谢谢你！现在很晚，我要回家。
+马大为：明天再见！
+丁力波：再见！ `;
+
+      const colors = {
+        "马大为": "#e8a35c",
+        "丁力波": "#7fb7ea",
+        "宋华": "#e98ca4",
+        "陈老师": "#9ccf8a",
+        "林强": "#c4a3ef",
+        "大家": "#86d2cc"
+      };
+
+      const P = window.pinyinPro;
+
+      function ruby(t) {
+        if (!P) return t;
+        try {
+          return P.pinyin(t, { type: "all" }).map(c =>
+            c.isZh
+              ? `<ruby>${c.origin}<rp>(</rp><rt>${c.pinyin}</rt><rp>)</rp></ruby>`
+              : c.origin
+          ).join("");
+        } catch (e) { return t; }
+      }
+
+      const app = document.getElementById("app");
+      let html = "";
+      for (const line of raw.split("\n")) {
+        const s = line.trim();
+        if (!s) continue;
+        if (/^第.场/.test(s)) {
+          html += `<h2>${ruby(s)}</h2>`;
+        } else {
+          const i = s.indexOf("：");
+          const who = s.slice(0, i), say = s.slice(i + 1);
+          const col = colors[who] || "#cfcfcf";
+          html += `<div class="line"><div class="who" style="color:${col}">${ruby(who)}</div><div class="text">${ruby(say)}</div></div>`;
+        }
+      }
+      app.innerHTML = html;
+    </script>
+  </body>
+
+</html>
