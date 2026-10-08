@@ -4,220 +4,319 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>汉语对话</title>
-    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js"></script>
+    <meta name="color-scheme" content="dark">
+    <title>汉语对话练习</title>
     <style>
       :root {
-        --bg: #14161b;
-        --text: #e9e6df;
-        --muted: #7d8290;
-        --rule: #272b34;
-        --pinyin: #a9a99f;
+        --bg: #14161a;
+        --fg: #ece9e4;
+        --mute: #8d9099;
+        --a: #7fb7c9;
+        --b: #e0a37a;
+        --card: #1c1f25;
         box-sizing: border-box;
         padding-top: env(safe-area-inset-top, 0px);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px)
       }
 
       html {
         scroll-padding-top: env(safe-area-inset-top, 0px);
-        color-scheme: dark;
+        height: 100%
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit
       }
 
       body {
         margin: 0;
         background: var(--bg);
-        color: var(--text);
-        font-family: "KaiTi", "Kaiti SC", "STKaiti", "楷体", "AR PL UKai CN", serif;
-        text-align: center;
+        color: var(--fg);
+        font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+        line-height: 1.4
       }
 
       main {
-        max-width: 42rem;
+        max-width: 1000px;
         margin: 0 auto;
-        padding: 3rem 1.25rem 5rem;
-        font-size: clamp(1.5rem, 5vw, 2rem);
+        padding: 0 16px 80px
       }
 
-      ruby {
-        ruby-align: center;
-        padding: 0 0.03em;
+      header {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 2;
+        background: var(--bg);
+        padding: 14px 0 12px;
+        border-bottom: 1px solid #262a31;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 16px;
+        align-items: center;
+        justify-content: space-between
       }
 
-      rt {
-        font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-        font-size: 0.5em;
-        color: var(--pinyin);
-        letter-spacing: 0.02em;
+      h1 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 0
+      }
+
+      .tools {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap
+      }
+
+      button {
+        font: inherit;
+        font-size: .85rem;
+        color: var(--fg);
+        background: var(--card);
+        border: 1px solid #2c3037;
+        border-radius: 999px;
+        padding: 6px 14px;
+        cursor: pointer
+      }
+
+      button:focus-visible {
+        outline: 2px solid var(--fg);
+        outline-offset: 2px
+      }
+
+      button[aria-pressed=true] {
+        border-color: var(--fg)
+      }
+
+      button.a[aria-pressed=true] {
+        border-color: var(--a);
+        color: var(--a)
+      }
+
+      button.b[aria-pressed=true] {
+        border-color: var(--b);
+        color: var(--b)
       }
 
       h2 {
-        font-weight: normal;
-        font-size: 1.15rem;
-        color: var(--muted);
-        margin: 4.5rem 0 2.5rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--rule);
-      }
-
-      h2:first-of-type {
-        margin-top: 0;
-        border-top: 0;
-        padding-top: 0;
+        font-size: .95rem;
+        font-weight: 500;
+        color: var(--mute);
+        margin: 44px 0 14px
       }
 
       .line {
-        margin: 0 0 1rem;
+        display: flex;
+        margin: 0 0 14px;
+        transition: opacity .2s
+      }
+
+      .line.B {
+        justify-content: flex-end
+      }
+
+      .bubble {
+        max-width: 88%;
+        padding: 10px 16px 12px;
+        border-radius: 14px;
+        background: var(--card);
+        border-left: 3px solid var(--a)
+      }
+
+      .B .bubble {
+        border-left: 0;
+        border-right: 3px solid var(--b);
+        text-align: right
       }
 
       .who {
-        font-size: 2rem;
-        margin-bottom: 0.15rem;
+        display: block;
+        font-size: .75rem;
+        color: var(--mute);
+        margin-bottom: 2px
       }
 
-      .text {
-        font-size: 1em;
-        line-height: 2.2;
+      .zh {
+        font-size: 2rem;
+        line-height: 2.5
+      }
+
+      ruby {
+        ruby-position: over
+      }
+
+      rt {
+        font-size: .5em;
+        color: #aab0ba;
+        letter-spacing: 0;
+        font-weight: 400
+      }
+
+      .nopy rt {
+        display: none
+      }
+
+      .nopy .zh {
+        line-height: 1.6
+      }
+
+      .fb {
+        display: block;
+        font-size: .75rem;
+        color: #aab0ba;
+        line-height: 1.2
+      }
+
+      body[data-focus=A] .line.B,
+      body[data-focus=B] .line.A {
+        opacity: .28
+      }
+
+      @media (prefers-reduced-motion:reduce) {
+        .line {
+          transition: none
+        }
+      }
+
+      @media (max-width:480px) {
+        .zh {
+          font-size: 1.35rem
+        }
+
+        .bubble {
+          max-width: 94%
+        }
       }
     </style>
   </head>
 
   <body>
-    <main id="app"></main>
+    <main>
+      <header>
+        <h1>汉语对话练习</h1>
+        <div class="tools">
+          <button id="py" aria-pressed="true">拼音</button>
+          <button class="a" data-f="A" aria-pressed="false">我是 A</button>
+          <button class="b" data-f="B" aria-pressed="false">我是 B</button>
+        </div>
+      </header>
+      <div id="out"></div>
+    </main>
     <script>
-      const raw = `第一场　早上，学校 
+      const WHO = { A: "马大为 Mǎ Dàwéi", B: "丁力波 Dīng Lìbō" };
+      const DATA = `# 问候
+A|丁力波，早上好！|Dīng Lìbō, zǎoshang hǎo!
+B|你早！好久不见。|Nǐ zǎo! Hǎojiǔ bú jiàn.
+A|好久不见。你最近怎么样？|Hǎojiǔ bú jiàn. Nǐ zuìjìn zěnmeyàng?
+B|我很忙。你呢？|Wǒ hěn máng. Nǐ ne?
+A|我不太忙。|Wǒ bú tài máng.
+# 名字和国籍
+B|对了，我们班有一个学生，她也学习汉语。|Duìle, wǒmen bān yǒu yí ge xuésheng, tā yě xuéxí Hànyǔ.
+A|她叫什么名字？她是哪国人？|Tā jiào shénme míngzi? Tā shì nǎ guó rén?
+B|她姓林，叫林娜。她是英国人。|Tā xìng Lín, jiào Lín Nà. Tā shì Yīngguó rén.
+A|林娜是她的中文名字吗？|Lín Nà shì tā de Zhōngwén míngzi ma?
+B|是，陈老师教我们写中文名字。我的中文名字是丁力波，你的呢？|Shì, Chén lǎoshī jiāo wǒmen xiě Zhōngwén míngzi. Wǒ de Zhōngwén míngzi shì Dīng Lìbō, nǐ de ne?
+A|我的中文名字是马大为。我是美国人，你是哪国人？|Wǒ de Zhōngwén míngzi shì Mǎ Dàwéi. Wǒ shì Měiguó rén, nǐ shì nǎ guó rén?
+B|我是越南人，我妈妈是四川人。我常常去越南。|Wǒ shì Yuènán rén, wǒ māma shì Sìchuān rén. Wǒ chángcháng qù Yuènán.
+A|你去四川吗？|Nǐ qù Sìchuān ma?
+B|我去四川，也去北京。四川和北京都很好。|Wǒ qù Sìchuān, yě qù Běijīng. Sìchuān hé Běijīng dōu hěn hǎo.
+A|你喜欢吃什么，喝什么？|Nǐ xǐhuan chī shénme, hē shénme?
+B|我喜欢吃酸菜鱼和越南冰奶咖啡。你呢？|Wǒ xǐhuan chī suāncài yú hé Yuènán bīng nǎi kāfēi. Nǐ ne?
+A|我喜欢吃包子，最喜欢喝奶茶。|Wǒ xǐhuan chī bāozi, zuì xǐhuan hē nǎichá.
+# 学习和工作
+B|你学什么专业？|Nǐ xué shénme zhuānyè?
+A|我是汉语专业。你的专业也是汉语吗？|Wǒ shì Hànyǔ zhuānyè. Nǐ de zhuānyè yě shì Hànyǔ ma?
+B|是，我也是汉语专业。我们都在 RMIT 学习。|Shì, wǒ yě shì Hànyǔ zhuānyè. Wǒmen dōu zài RMIT xuéxí.
+A|你星期几有汉语课？|Nǐ xīngqī jǐ yǒu Hànyǔ kè?
+B|我星期二上午十一点半和星期四中午十二点半有汉语课。|Wǒ xīngqī'èr shàngwǔ shíyī diǎn bàn hé xīngqīsì zhōngwǔ shí'èr diǎn bàn yǒu Hànyǔ kè.
+A|我也是。汉语课有意思吗？|Wǒ yě shì. Hànyǔ kè yǒu yìsi ma?
+B|很有意思。我们学五十个汉字。|Hěn yǒu yìsi. Wǒmen xué wǔshí gè Hànzì.
+A|汉语课难不难？|Hànyǔ kè nán bu nán?
+B|有一点儿难，但是很有意思。|Yǒu yìdiǎnr nán, dànshì hěn yǒu yìsi.
+A|对，口语特别难。你们班一共有多少人？|Duì, kǒuyǔ tèbié nán. Nǐmen bān yígòng yǒu duōshao rén?
+B|我们班一共有十五个人，男生不多。你工作吗？|Wǒmen bān yígòng yǒu shíwǔ gè rén, nánshēng bù duō. Nǐ gōngzuò ma?
+A|我晚上在学校工作，不太累。你呢？|Wǒ wǎnshang zài xuéxiào gōngzuò, bú tài lèi. Nǐ ne?
+B|我不工作。咱们一起练习口语，好不好？|Wǒ bù gōngzuò. Zánmen yìqǐ liànxí kǒuyǔ, hǎo bu hǎo?
+A|好！|Hǎo!
+# 歌曲和电影
+A|你喜欢中国歌吗？|Nǐ xǐhuan Zhōngguó gē ma?
+B|我很喜欢中文歌，最喜欢周杰伦。你呢？|Wǒ hěn xǐhuan Zhōngwén gē, zuì xǐhuan Zhōu Jiélún. Nǐ ne?
+A|我不听中文歌，但我喜欢电影《叶问》。|Wǒ bù tīng Zhōngwén gē, dàn wǒ xǐhuan diànyǐng «Yè Wèn».
+B|我也喜欢这个电影，特别有意思。|Wǒ yě xǐhuan zhège diànyǐng, tèbié yǒu yìsi.
+# 家人和宠物
+B|你看，这是我们家的照片。|Nǐ kàn, zhè shì wǒmen jiā de zhàopiàn.
+A|这张照片真漂亮！你们家有几口人？|Zhè zhāng zhàopiàn zhēn piàoliang! Nǐmen jiā yǒu jǐ kǒu rén?
+B|我们家有五口人：爸爸、妈妈、一个哥哥、一个妹妹和我。你呢？|Wǒmen jiā yǒu wǔ kǒu rén: bàba, māma, yí ge gēge, yí ge mèimei hé wǒ. Nǐ ne?
+A|我们家有四口人：爸爸、妈妈、一个姐姐和我。你爸爸妈妈做什么工作？|Wǒmen jiā yǒu sì kǒu rén: bàba, māma, yí ge jiějie hé wǒ. Nǐ bàba māma zuò shénme gōngzuò?
+B|我爸爸是医生，我妈妈是律师。你爸爸妈妈呢？|Wǒ bàba shì yīshēng, wǒ māma shì lǜshī. Nǐ bàba māma ne?
+A|我爸爸是老师，他教英语。我妈妈不工作，她在家。|Wǒ bàba shì lǎoshī, tā jiāo Yīngyǔ. Wǒ māma bù gōngzuò, tā zài jiā.
+B|这是我哥哥，这是我妹妹。我哥哥今年二十八岁，他也是律师。|Zhè shì wǒ gēge, zhè shì wǒ mèimei. Wǒ gēge jīnnián èrshíbā suì, tā yě shì lǜshī.
+A|你妹妹今年几岁？她是学生吗？|Nǐ mèimei jīnnián jǐ suì? Tā shì xuésheng ma?
+B|她今年十五岁，是学生。她学钢琴，很喜欢唱歌。|Tā jīnnián shíwǔ suì, shì xuésheng. Tā xué gāngqín, hěn xǐhuan chàng gē.
+A|她唱中文歌吗？|Tā chàng Zhōngwén gē ma?
+B|她唱中文歌，也跳舞。你姐姐喜欢唱歌跳舞吗？|Tā chàng Zhōngwén gē, yě tiàowǔ. Nǐ jiějie xǐhuan chàng gē tiàowǔ ma?
+A|我姐姐不喜欢跳舞，她喜欢看电影。她属龙，一九九六年出生。|Wǒ jiějie bù xǐhuan tiàowǔ, tā xǐhuan kàn diànyǐng. Tā shǔ lóng, yī jiǔ jiǔ liù nián chūshēng.
+B|我妹妹属狗。对了，你们家有狗吗？|Wǒ mèimei shǔ gǒu. Duìle, nǐmen jiā yǒu gǒu ma?
+A|我们家有一只狗，它叫贝贝。|Wǒmen jiā yǒu yì zhī gǒu, tā jiào Bèibèi.
+B|贝贝今年几岁？它喜欢吃什么？|Bèibèi jīnnián jǐ suì? Tā xǐhuan chī shénme?
+A|它今年五岁，喜欢吃米饭和包子，米饭和包子都很好吃。|Tā jīnnián wǔ suì, xǐhuan chī mǐfàn hé bāozi, mǐfàn hé bāozi dōu hěn hǎochī.
+B|我们家有一只猫，它很漂亮。|Wǒmen jiā yǒu yì zhī māo, tā hěn piàoliang.
+# RMIT 的朋友
+A|你有中国朋友吗？|Nǐ yǒu Zhōngguó péngyou ma?
+B|我有两个中国朋友，他们也在 RMIT 学习。|Wǒ yǒu liǎng ge Zhōngguó péngyou, tāmen yě zài RMIT xuéxí.
+A|他们学习什么专业？|Tāmen xuéxí shénme zhuānyè?
+B|他们都是英语专业。星期六他们教我说汉语，写汉字。|Tāmen dōu shì Yīngyǔ zhuānyè. Xīngqīliù tāmen jiāo wǒ shuō Hànyǔ, xiě Hànzì.
+A|他们星期日有时间吗？|Tāmen xīngqīrì yǒu shíjiān ma?
+B|星期日他们和我们一起喝咖啡，怎么样？|Xīngqīrì tāmen hé wǒmen yìqǐ hē kāfēi, zěnmeyàng?
+# 生日邀请和告别
+A|行！我很高兴认识他们。对了，明天是我姐姐的生日。|Xíng! Wǒ hěn gāoxìng rènshi tāmen. Duìle, míngtiān shì wǒ jiějie de shēngrì.
+B|她今年多大？你送她什么生日礼物？|Tā jīnnián duō dà? Nǐ sòng tā shénme shēngrì lǐwù?
+A|她今年三十岁。我送她一盒巧克力和一个蛋糕。明天晚上我们家有一个生日聚会。你有时间吗？|Tā jīnnián sānshí suì. Wǒ sòng tā yì hé qiǎokèlì hé yí ge dàngāo. Míngtiān wǎnshang wǒmen jiā yǒu yí ge shēngrì jùhuì. Nǐ yǒu shíjiān ma?
+B|不好意思，明天晚上我有英语课，恐怕不行。星期日下午两点咱们一起去喝咖啡，行吗？|Bù hǎoyìsi, míngtiān wǎnshang wǒ yǒu Yīngyǔ kè, kǒngpà bù xíng. Xīngqīrì xiàwǔ liǎng diǎn zánmen yìqǐ qù hē kāfēi, xíng ma?
+A|行！咱们也一起练习口语。|Xíng! Zánmen yě yìqǐ liànxí kǒuyǔ.
+B|好。现在差五分十二点，咱们一点有课。一起去吃饭吧！|Hǎo. Xiànzài chà wǔ fēn shí'èr diǎn, zánmen yī diǎn yǒu kè. Yìqǐ qù chī fàn ba!
+A|好主意！咱们去吃包子和面条。|Hǎo zhǔyi! Zánmen qù chī bāozi hé miàntiáo.
+B|行！祝你姐姐生日快乐，也祝你合家欢乐！|Xíng! Zhù nǐ jiějie shēngrì kuàilè, yě zhù nǐ hé jiā huān lè!
+A|谢谢你！一会儿见。|Xièxie nǐ! Yíhuìr jiàn.
+B|一会儿见！|Yíhuìr jiàn!`;
 
-马大为：丁力波，早上好！
-丁力波：你早！好久不见。
-马大为：好久不见。你最近怎么样？
-丁力波：我很忙。你呢？
-马大为：我不太忙。 
-第二场　练习口语 
+      const V = "aeiouüāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ";
+      const SYL = new RegExp(`(?:zh|ch|sh|[bpmfdtnlgkhjqxzcsrwy])?[${V}]+(?:ng(?![${V}])|n(?![${V}]))?|r`, "gi");
+      const CJK = /[\u4e00-\u9fff]/;
 
-丁力波：对了，今天我们有口语课。咱们一起练习口语吧。
-马大为：好。我是宋华，你问我。
-丁力波：请问，你叫什么名字？
-马大为：我姓宋，叫宋华。你叫什么名字？
-丁力波：我叫丁力波。认识你很高兴！
-马大为：认识你，我也很高兴。请进，请坐。
-丁力波：谢谢。您贵姓？
-马大为：我姓宋。
-丁力波：那是谁？
-马大为：那是陈老师，他是我们的汉语老师。你的口语很好。
-丁力波：谢谢。陈老师教我们说汉语，写汉字。
-马大为：写汉字有意思吗？
-丁力波：很有意思。我常常练习写汉字，也常练习口语。在口语课，我们只说汉语。
-马大为：你学习什么专业？
-丁力波：我的专业是中文。我学汉语，也学英语。我们有汉语课、口语课和语法课。
-马大为：你们班一共有多少人？
-丁力波：我们班一共有十五个人。男生很少，只有两个。大家都是学生。
-马大为：欢迎你来我们学校学习汉语！
-丁力波：谢谢！你是哪国人？
-马大为：我是美国人。你呢？
-丁力波：我是英国人。我哥哥叫林强，他在英国。陈老师是中国人，他是北京人。 
-第三场　墨尔本 
-
-马大为：丁力波，你一个人在墨尔本吗？
-丁力波：是，我一个人在墨尔本。我家在英国。
-马大为：你在几号楼？
-丁力波：我在十五号楼。你呢？
-马大为：我在八号楼。明天上午九点钟我到学校。
-丁力波：好。 
-第四场　照片 
-
-马大为：丁力波，你家有几口人？
-丁力波：我家有五口人：爸爸、妈妈、哥哥、妹妹和我。我们还有一只狗和一只猫，狗叫贝贝。我妈妈问你好。
-马大为：谢谢！你爸爸妈妈做什么工作？
-丁力波：我爸爸是医生，我妈妈是律师。
-马大为：你有弟弟吗？
-丁力波：我没有弟弟，也没有姐姐。你有兄弟姐妹吗？
-马大为：我没有兄弟姐妹，我家只有三口人。你看这张照片，这张照片真漂亮！
-丁力波：这是谁？
-马大为：这是陆雨平和他的女儿。陆雨平是北京人，现在在上海工作。
-丁力波：这个孩子今年几岁？
-马大为：她今年五岁。
-丁力波：我妹妹今年九岁，她也是学生。她上午有汉语课，晚上她还有英语课。 
-第五场　吃饭 
-
-马大为：咱们去吃饭吧。你喜欢吃什么？
-丁力波：我喜欢吃饺子和包子。大包子很好吃，小饺子也很好吃。你呢？
-马大为：我喜欢吃米饭和面条。
-丁力波：你喜欢喝什么？
-马大为：我喜欢喝茶，也喜欢喝咖啡。
-丁力波：今天吃饭的人很多。这个点心真好吃！
-马大为：饭也很好吃。 
-第六场　时间和课 
-
-丁力波：现在几点？
-马大为：现在差五分八点。
-丁力波：啊，我刚到学校，不晚吧？
-马大为：不晚。你明天几点有课？
-丁力波：明天上午十点十分我有语法课，下午两点一刻有钢琴课，晚上八点半我还要去看电影。
-马大为：你太忙！
-丁力波：我特别累。
-马大为：对了，你明天晚上有没有时间？咱们一起去喝咖啡吧。
-丁力波：恐怕不行，明天我没有时间。
-马大为：星期日呢？星期日我们班有活动，你参加吗？
-丁力波：这个星期我有很多事儿，一天也没有时间。
-马大为：真可惜！
-丁力波：不好意思。 
-第七场　生日聚会 
-
-马大为：今天几月几号？
-丁力波：今天八月二十二号。明天是我的生日。
-马大为：生日快乐！你今年多大？
-丁力波：我今年二十岁, 我属龙。我1988年出生。
-马大为：我属狗。
-丁力波：明天我家有一个生日聚会，欢迎你来！我哥哥的生日就是明天，他在英国也有个聚会。
-马大为：昨天我听说你的聚会。这是你的生日礼物，一盒巧克力。
-丁力波：谢谢你送我礼物！
-马大为：不客气，你太客气！我还送你一个蛋糕。
-丁力波：这个蛋糕真大！一会儿我介绍一下我的朋友们，大家都是学生。
-马大为：中国人生日吃寿面。咱们吃寿面吧！
-丁力波：好主意！一会儿咱们唱歌、跳舞吧。
-马大为：我不喜欢跳舞，我喜欢唱歌。我唱一个中国歌，你跳个舞。
-丁力波：好！祝我生日快乐，咱们干杯！
-马大为：干杯！
-丁力波：我今天很快乐。谢谢你！现在很晚，我要回家。
-马大为：明天再见！
-丁力波：再见！ `;
-
-      const colors = {
-        "马大为": "#e8a35c",
-        "丁力波": "#7fb7ea",
-        "宋华": "#e98ca4",
-        "陈老师": "#9ccf8a",
-        "林强": "#c4a3ef",
-        "大家": "#86d2cc"
-      };
-
-      const P = window.pinyinPro;
-
-      function ruby(t) {
-        if (!P) return t;
-        try {
-          return P.pinyin(t, { type: "all" }).map(c =>
-            c.isZh
-              ? `<ruby>${c.origin}<rp>(</rp><rt>${c.pinyin}</rt><rp>)</rp></ruby>`
-              : c.origin
-          ).join("");
-        } catch (e) { return t; }
-      }
-
-      const app = document.getElementById("app");
-      let html = "";
-      for (const line of raw.split("\n")) {
-        const s = line.trim();
-        if (!s) continue;
-        if (/^第.场/.test(s)) {
-          html += `<h2>${ruby(s)}</h2>`;
-        } else {
-          const i = s.indexOf("：");
-          const who = s.slice(0, i), say = s.slice(i + 1);
-          const col = colors[who] || "#cfcfcf";
-          html += `<div class="line"><div class="who" style="color:${col}">${ruby(who)}</div><div class="text">${ruby(say)}</div></div>`;
+      function render(zh, py) {
+        const syl = py.replace(/RMIT/g, "").replace(/['’]/g, "").match(SYL) || [];
+        const chars = [...zh];
+        if (syl.length !== chars.filter(c => CJK.test(c)).length) {
+          return `<span class="fb">${py}</span>${zh}`;
         }
+        let i = 0;
+        return chars.map(c => CJK.test(c) ? `<ruby>${c}<rt>${syl[i++]}</rt></ruby>` : c).join("");
       }
-      app.innerHTML = html;
+
+      const out = document.getElementById("out");
+      let html = "";
+      for (const row of DATA.split("\n")) {
+        if (row.startsWith("# ")) { html += `<h2>${row.slice(2)}</h2>`; continue; }
+        const [s, zh, py] = row.split("|");
+        html += `<div class="line ${s}"><div class="bubble"><span class="who">${WHO[s]}</span><div class="zh">${render(zh, py)}</div></div></div>`;
+      }
+      out.innerHTML = html;
+
+      const pyBtn = document.getElementById("py");
+      pyBtn.onclick = () => {
+        const on = pyBtn.getAttribute("aria-pressed") !== "true";
+        pyBtn.setAttribute("aria-pressed", on);
+        out.classList.toggle("nopy", !on);
+      };
+      document.querySelectorAll("[data-f]").forEach(b => b.onclick = () => {
+        const was = b.getAttribute("aria-pressed") === "true";
+        document.querySelectorAll("[data-f]").forEach(x => x.setAttribute("aria-pressed", "false"));
+        if (was) { delete document.body.dataset.focus; }
+        else { b.setAttribute("aria-pressed", "true"); document.body.dataset.focus = b.dataset.f; }
+      });
     </script>
   </body>
 
