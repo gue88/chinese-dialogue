@@ -299,7 +299,7 @@ B|明天见。|Míngtiān jiàn.|See you tomorrow.`;
         `[ēéěè]r(?![${V}])|(?:zh|ch|sh|[bpmfdtnlgkhjqxzcsrwy])?[${V}]+(?:ng(?![${V}])|n(?![${V}]))?|r`,
         "gi"
       );
-      const CJK = /[\u4e00-\u9fff]/;
+      const CJK = /[\u4e00-\u9fff\u3007]/;
 
       function render(zh, py) {
         // apostrophes become spaces so syllables like qī'èr and kě'ài stay separate
