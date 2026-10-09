@@ -291,26 +291,26 @@ B|不好意思，明天晚上我有英语课，恐怕不行。那我们星期日
 A|好啊！好主意！|Hǎo a! Hǎo zhǔyi!|Okay, good idea!
 B|行！祝你姐姐生日快乐，也祝你合家欢乐.|Xíng! Zhù nǐ jiějie shēngrì kuàilè, yě zhù nǐ héjiā huānlè.|Great! Happy birthday to your sister, and I wish happiness to your whole family too.
 A|谢谢你！明天见。|Xièxie nǐ! Míngtiān jiàn.|Thank you! See you tomorrow.
-B|明天见.|Míngtiān jiàn.|See you tomorrow.
+B|明天见.|Míngtiān jiàn.|See you tomorrow.`;
 
       const V = "aeiouüāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ";
-      const SYL = new RegExp(`(?: zh | ch | sh | [bpmfdtnlgkhjqxzcsrwy]) ? [${ V }] + (?: ng(?![${ V }]) | n(?![${ V }])) ?| r`, "gi");
+      const SYL = new RegExp(`(?: zh | ch | sh | [bpmfdtnlgkhjqxzcsrwy]) ? [${V}] + (?: ng(?![${V}]) | n(?![${V}])) ?| r`, "gi");
       const CJK = /[\u4e00-\u9fff]/;
 
       function render(zh, py) {
         const syl = py.replace(/RMIT/g, "").replace(/['’]/g, "").match(SYL) || [];
         const chars = [...zh];
         if (syl.length !== chars.filter(c => CJK.test(c)).length) {
-          return `< span class="fb" > ${ py }</ > ${ zh } `;
+          return `< span class="fb" > ${py}</ > ${zh} `;
         }
         let i = 0;
-        return chars.map(c => CJK.test(c) ? `< ruby > ${ c } <rt>${syl[i++]}</rt></ > ` : c).join("");
+        return chars.map(c => CJK.test(c) ? `< ruby > ${c} <rt>${syl[i++]}</rt></ > ` : c).join("");
       }
 
       const out = document.getElementById("out");
       let html = "";
       for (const row of DATA.split("\n")) {
-        if (row.startsWith("# ")) { html += `< h2 > ${ row.slice(2) }</ > `; continue; }
+        if (row.startsWith("# ")) { html += `< h2 > ${row.slice(2)}</ > `; continue; }
         const [s, zh, py, en] = row.split("|");
         html += `< div class="line ${s}" > <div class="bubble"><span class="who">${WHO[s]}</span><div class="zh">${render(zh, py)}</div><div class="en">${en || ""}</div></div></ >`;
       }
