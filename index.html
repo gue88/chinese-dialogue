@@ -109,8 +109,7 @@
 
       .line {
         display: flex;
-        margin: 0 0 14px;
-        transition: opacity .2s
+        margin: 0 0 14px
       }
 
       .line.B {
@@ -174,6 +173,15 @@
         display: block
       }
 
+      /* English-only mode: hide Chinese/pinyin, force English visible */
+      .onlyen .zh {
+        display: none
+      }
+
+      .onlyen .en {
+        display: block
+      }
+
       .fb {
         display: block;
         font-size: .75rem;
@@ -181,15 +189,10 @@
         line-height: 1.2
       }
 
+      /* Fully hide the other speaker's lines when focused */
       body[data-focus=A] .line.B,
       body[data-focus=B] .line.A {
-        opacity: .28
-      }
-
-      @media (prefers-reduced-motion:reduce) {
-        .line {
-          transition: none
-        }
+        display: none
       }
 
       @media (max-width:480px) {
@@ -211,6 +214,7 @@
         <div class="tools">
           <button id="py" aria-pressed="true">拼音</button>
           <button id="en" aria-pressed="false">English</button>
+          <button id="enonly" aria-pressed="false">EN only</button>
           <button class="a" data-f="A" aria-pressed="false">我是 A</button>
           <button class="b" data-f="B" aria-pressed="false">我是 B</button>
         </div>
@@ -330,6 +334,12 @@ B|明天见。|Míngtiān jiàn.|See you tomorrow.`;
         const on = enBtn.getAttribute("aria-pressed") !== "true";
         enBtn.setAttribute("aria-pressed", on);
         out.classList.toggle("showen", on);
+      };
+      const enOnlyBtn = document.getElementById("enonly");
+      enOnlyBtn.onclick = () => {
+        const on = enOnlyBtn.getAttribute("aria-pressed") !== "true";
+        enOnlyBtn.setAttribute("aria-pressed", on);
+        out.classList.toggle("onlyen", on);
       };
       document.querySelectorAll("[data-f]").forEach(b => b.onclick = () => {
         const was = b.getAttribute("aria-pressed") === "true";
