@@ -240,7 +240,7 @@ B|有一点儿难，但是很有意思。我们要学一百个汉字。|Yǒu yì
 A|对，汉字特别难。你们班一共有多少人？|Duì, Hànzì tèbié nán. Nǐmen bān yígòng yǒu duōshao rén?|Yes, the characters are especially hard. How many people are in your class altogether?
 B|我们班一共有十五个人，男生不多。你工作吗？|Wǒmen bān yígòng yǒu shíwǔ gè rén, nánshēng bù duō. Nǐ gōngzuò ma?|There are fifteen people in our class altogether, and not many boys. Do you work?
 A|我晚上在学校工作，不太累。你呢？|Wǒ wǎnshang zài xuéxiào gōngzuò, bú tài lèi. Nǐ ne?|I work at the school in the evenings, so it's not too tiring. How about you?
-B|我不工作。咱们一起练习口语吧，好不好？|Wǒ bù gōngzuò. Zánmen yìqǐ liànxí kǒuyǔ ba, hǎo bu hǎo?|I don't work. Shall we practise speaking together?
+B|我不工作。咱们一起练习一下口语吧，好不好？|Wǒ bù gōngzuò. Zánmen yìqǐ liànxí yíxià kǒuyǔ ba, hǎo bu hǎo?|I don't work. Let's practise speaking Chinese together for a bit, shall we?
 A|好！|Hǎo!|Good!
 # 名字和国籍
 B|对了，我们班有一个学生，她也学习汉语。|Duìle, wǒmen bān yǒu yí ge xuésheng, tā yě xuéxí Hànyǔ.|By the way, there's a student in our class who also studies Chinese.
@@ -303,7 +303,10 @@ B|明天见。|Míngtiān jiàn.|See you tomorrow.`;
 
       function render(zh, py) {
         // apostrophes become spaces so syllables like qī'èr and kě'ài stay separate
-        const syl = py.replace(/RMIT/g, "").replace(/['’]/g, " ").match(SYL) || [];
+        const syl = py
+          .replace(/\b(?:RMIT|IT)\b/gi, " ")
+          .replace(/['’]/g, " ")
+          .match(SYL) || [];
         const chars = [...zh];
         if (syl.length !== chars.filter(c => CJK.test(c)).length) {
           return `<span class="fb">${py}</span>${zh}`;
